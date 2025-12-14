@@ -14,11 +14,7 @@
  
  │    └── main.py # Сервис
 
- ├── images/ 
- 
- │    ├── client_output.png # Скрины работы клиента
- 
- │    └── Docker_screenshot.png # Скрины работы докер образа
+ ├── images/ # Картинки с работой сервиса
 
  ├── models/
  
@@ -30,17 +26,17 @@
 
  ├── README.md # Документация
  
- ├── docker-compose.blue.yml # Контракт API
+ ├── docker-compose.blue.yml # Конфигурация Blue-версии сервиса
  
- ├── docker-compose.green.yml # Скрипт сервера
+ ├── docker-compose.green.yml # Конфигурация Green-версии сервиса
 
- ├── docker-compose.nginx.yml # Описания сообщений
+ ├── docker-compose.nginx.yml # Конфигурация балансировщика Nginx между Blue и Green
 
- ├── nginx.conf # Интерфейс сервиса
+ ├── nginx.conf # Настройки маршрутизации и проксирования Nginx
  
  ├── requirements.txt # Зависимостим
  
- └── ДЗ3.ipynb # ноутбук с выполнением
+ └── ДЗ3.ipynb # Ноутбук с выполнением
 
 ## 🎯 Цель проекта
 Задание выполняется в рамках модуля 3 «Автоматизированное развертывание с помощью CI/CD».
