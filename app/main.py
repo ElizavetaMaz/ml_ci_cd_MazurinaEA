@@ -1,10 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from pydantic import BaseModel
 import numpy as np
 import os
 import joblib
 import logging
-from prometheus_client import Counter
+from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 
 # Настройка логов
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -42,3 +42,6 @@ def predict(request: PredictRequest):
         "version": VERSION
     }
 
+@app.get("/metrics")
+def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
