@@ -1,19 +1,21 @@
-# Базовый образ
-FROM python:3.10-slim
+name: Model Deployment
 
-# Переменные окружения
-ENV MODEL_PATH=/app/models/model.pkl \
-    MODEL_VERSION=v1.0.0
+on:
+  push:
+    branches: [ main ]
 
-# Рабочая директория
-WORKDIR /app
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-# Копирование зависимостей и установка
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}:${{ github.sha }} .
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
 
-# Копируем весь проект
-COPY . .
-
-# Точка входа
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+      - name: Deploy via API
+        run: |
+          curl -X POST https://api.cloudprovider/deploy             -H "Authorization: Bearer ${{ secrets.CLOUD_TOKEN }}"             -d "image=ghcr.io/${{ github.repository }}:${{ github.sha }}"
